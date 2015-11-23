@@ -1,0 +1,63 @@
+<?php
+
+
+
+
+
+
+/** Implements hook_enable()
+ */
+function soc_boxgroup_enable() {
+
+  watchdog(SOC_BOXGROUP_MODULE_NAME, 'Creating field '  . SOC_BOXGROUP_FOLDER_FIELDNAME );
+
+  // Create the field
+  $field = array(
+    'field_name' => SOC_BOXGROUP_FOLDER_FIELDNAME,
+    'cardinality' => 1,
+    'type' => 'text',
+  );
+  field_create_field($field);
+
+
+
+
+
+  // Get all current Node Types that are a Group. Loop over these and add
+  //
+  $group = og_get_all_group_bundle();
+  if ($nodes = $group['nodes']) {
+    foreach ($nodes as $node_type=>$node_type_title) {
+
+      watchdog(SOC_BOXGROUP_MODULE_NAME, t('Attaching field @fieldname instance to @group',[
+        'fieldname'=>SOC_BOXGROUP_FOLDER_FIELDNAME,
+        'group'=>$node_type_title,
+      ]));
+      $instance = array(
+        'field_name' => SOC_BOXGROUP_FOLDER_FIELDNAME,
+        'label' => t('Box Folder ID'),
+        'bundle' => $node_type,
+        'entity_type' => 'node',
+        'widget' => array(
+          'type' => 'text_textfield',
+        )
+      );
+    }
+    field_create_instance($instance);
+  }
+
+
+}
+
+/**
+ * Remove anything we created. Try to be a nice, respectful neighor to other
+ * modules that we coexist with.
+ * @throws
+ */
+function soc_boxgroup_uninstall() {
+
+
+  // delete the field
+  watchdog(SOC_BOXGROUP_MODULE_NAME, 'Removing field ' . SOC_BOXGROUP_FOLDER_FIELDNAME .' due to uninstalling module');
+  field_delete_field(SOC_BOXGROUP_FOLDER_FIELDNAME);
+}

@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @file soc_boxgroup.module
+ * TODO: Enter file description here.
+ */
+
+
+
+define('SOC_BOXGROUP_MODULE_NAME','soc_boxgropu');
+define('SOC_BOXGROUP_FOLDER_FIELDNAME', 'soc_boxgroup_folder');   // The field name that holds the Box ID
+
+
+
+
+/**
+ * Implements hook_menu().
+ */
+function soc_boxgroup_menu() {
+  $items = array();
+
+  $items['admin/config/TODO-SECTION/soc_boxgroup'] = array(
+    'title' => 'Administer Soc Boxgroup',
+    'description' => 'Configure settings for Soc Boxgroup.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('soc_boxgroup_settings_form'),
+    'access arguments' => array('administer soc_boxgroup'),
+    'file' => 'soc_boxgroup.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function soc_boxgroup_form_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['type']) && $form['type']['#value'] . '_node_settings' == $form_id) {
+    $form['workflow']['upload_' . $form['type']['#value']] = array(
+      '#type' => 'radios',
+      '#title' => t('Attachments'),
+      '#default_value' => variable_get('upload_' . $form['type']['#value'], 1),
+      '#options' => array(t('Disabled'), t('Enabled')),
+    );
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function soc_boxgroup_permission() {
+  $permissions = array();
+
+  $permissions['administer soc_boxgroup'] = array(
+    'title' => t('TODO: enter permission title'),
+    'description' => t('TODO: enter permission description'),
+  );
+  return $permissions;
+}
+
+
+/**
+ * Implements hook_page_alter().
+ */
+function soc_boxgroup_page_alter(&$page) {
+
+}

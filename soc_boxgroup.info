@@ -1,0 +1,6 @@
+name = Soc Boxgroup
+description = TODO: Description of module
+dependencies[] = og
+package = soc
+core = 7.x
+files[] = tests/soc_boxgroup.test
