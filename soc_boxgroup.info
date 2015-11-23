@@ -1,5 +1,6 @@
 name = Soc Boxgroup
 description = TODO: Description of module
+dependencies[] = soc_boxauth
 dependencies[] = og
 package = soc
 core = 7.x
