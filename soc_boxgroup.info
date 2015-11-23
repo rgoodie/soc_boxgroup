@@ -1,5 +1,5 @@
 name = Soc Boxgroup
-description = TODO: Description of module
+description = Sync user list between a Box.com folder and an organic group(s)
 dependencies[] = soc_boxauth
 dependencies[] = og
 package = soc
