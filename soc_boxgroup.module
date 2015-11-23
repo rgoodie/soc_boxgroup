@@ -59,8 +59,12 @@ function soc_boxgroup_permission() {
 
 
 /**
+ *
+ *
  * Implements hook_page_alter().
  */
 function soc_boxgroup_page_alter(&$page) {
+  $group = og_get_all_group_bundle();
+  dpm($group);
 
 }

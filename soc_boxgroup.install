@@ -26,13 +26,20 @@ function soc_boxgroup_enable() {
   // Get all current Node Types that are a Group. Loop over these and add
   //
   $group = og_get_all_group_bundle();
-  if ($nodes = $group['nodes']) {
+  watchdog(SOC_BOXGROUP_MODULE_NAME, 'Groups found: ' . implode(',', array_keys($group)));
+
+
+  if ($nodes = $group['node']) {
+
+    watchdog(SOC_BOXGROUP_MODULE_NAME, 'Groups nodes found: ' . implode(',', array_keys($nodes)));
+
     foreach ($nodes as $node_type=>$node_type_title) {
 
       watchdog(SOC_BOXGROUP_MODULE_NAME, t('Attaching field @fieldname instance to @group',[
-        'fieldname'=>SOC_BOXGROUP_FOLDER_FIELDNAME,
-        'group'=>$node_type_title,
+        '@fieldname'=>SOC_BOXGROUP_FOLDER_FIELDNAME,
+        '@group'=>$node_type_title,
       ]));
+
       $instance = array(
         'field_name' => SOC_BOXGROUP_FOLDER_FIELDNAME,
         'label' => t('Box Folder ID'),
