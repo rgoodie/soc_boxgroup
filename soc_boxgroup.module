@@ -7,7 +7,7 @@
 
 
 
-define('SOC_BOXGROUP_MODULE_NAME','soc_boxgropu');
+define('SOC_BOXGROUP_MODULE_NAME','soc_boxgroup');
 define('SOC_BOXGROUP_FOLDER_FIELDNAME', 'soc_boxgroup_folder');   // The field name that holds the Box ID
 
 
@@ -30,19 +30,6 @@ function soc_boxgroup_menu() {
   return $items;
 }
 
-/**
- * Implements hook_form_alter().
- */
-function soc_boxgroup_form_alter(&$form, &$form_state, $form_id) {
-  if (isset($form['type']) && $form['type']['#value'] . '_node_settings' == $form_id) {
-    $form['workflow']['upload_' . $form['type']['#value']] = array(
-      '#type' => 'radios',
-      '#title' => t('Attachments'),
-      '#default_value' => variable_get('upload_' . $form['type']['#value'], 1),
-      '#options' => array(t('Disabled'), t('Enabled')),
-    );
-  }
-}
 
 /**
  * Implements hook_permission().
@@ -64,7 +51,82 @@ function soc_boxgroup_permission() {
  * Implements hook_page_alter().
  */
 function soc_boxgroup_page_alter(&$page) {
-  $group = og_get_all_group_bundle();
-  dpm($group);
+
 
 }
+
+
+
+function soc_boxgroup_og_membership_update(OgMembership $og_membership) {
+  dpm($og_membership);
+
+  watchdog(SOC_BOXGROUP_MODULE_NAME, __FUNCTION__);
+
+
+
+  $group_id = $og_membership->gid;
+  $entity_id = $og_membership->etid;
+  $state = $og_membership->state;
+}
+
+function soc_boxgroup_og_membership_delete(OgMembership $og_membership) {
+  watchdog(SOC_BOXGROUP_MODULE_NAME, 'membership delete');
+  dpm($og_membership);
+}
+
+
+function soc_boxgroup_og_membership_presave(OgMembership $og_membership) {
+  watchdog(SOC_BOXGROUP_MODULE_NAME, 'membership presave');
+  dpm($og_membership);
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+/*function soc_boxgroup_form_og_ui_delete_membership_alter(&$form, &$form_state, $form_id) {
+
+
+  // If there is a box folder but no box information in session, stop the progress
+  // and ask user to make that authentication beforehand
+
+  if (!isset($_SESSION['box'])) {
+    $msg = t('Are you logged into box? Have you allowed allowed Society to connect to Box? If not !link now. Request to remove user to the box folder will not be sent to Box', [
+      '!link'=>l('do so now', 'do/box/auth', [
+        'query'=>[
+          'destination'=>current_path(),
+        ]
+      ]),
+    ]);
+    watchdog(SOC_BOXGROUP_MODULE_NAME, $msg);
+    drupal_set_message($msg, 'error');
+  }
+
+
+
+  watchdog(SOC_BOXGROUP_MODULE_NAME, 'Altering og_ui_delete_membership form');
+  $form['#validate'][]='_soc_boxgroup_form_og_ui_delete_membership_alter_validate';
+  dpm($form_state);
+  //dpm($form);
+}*/
+
+
+/**
+ * Intercepts normal drupal form flow of confirmation form -> submit and injects
+ * through the #validate a function to make calls to box.
+ *
+ * @param $elements
+ * @param $form_state
+ * @param $form_id
+ */
+/*function _soc_boxgroup_form_og_ui_delete_membership_alter_validate(&$elements, &$form_state, $form_id) {
+
+  watchdog(SOC_BOXGROUP_MODULE_NAME, 'Executing altered "validate". ');
+
+  // If there is no box token, then there is nothing we can do.
+  if (!isset($_SESSION['box']['auth_token'])) {
+
+  }
+
+  watchdog(SOC_BOXGROUP_MODULE_NAME, 'TODO: make request to box to remove');
+}
+*/
